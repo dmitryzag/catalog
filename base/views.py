@@ -14,6 +14,6 @@ def firstLevel(req, pk):
     # context = {'items': items}
     return render(req, 'catalog.html')
 
-def secondLevel(req,user):
+def secondLevel(req,us):
     return render(req, 'catalog.html')
 
