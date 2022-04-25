@@ -5,10 +5,15 @@ from .models import Item
 
 
 def catalog(req):
-    return render(req, 'main.html')
+    items = Item.objects.all()
+    context = {'items': items}
+    return render(req, 'catalog.html', context)
 
+def firstLevel(req, pk):
+    # items = Item.objects.all()
+    # context = {'items': items}
+    return render(req, 'catalog.html')
 
-def breadcrumb(req):
-    slugs = Item.objects.values('slug')
-    context = {'slugs': slugs}
-    return render(req, 'base/category.html', context)
+def secondLevel(req,user):
+    return render(req, 'catalog.html')
+
