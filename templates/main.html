@@ -9,9 +9,12 @@
     <h1 class="has-text-weight-bold has-text-centered mt-4 is-size-3">Электронный каталог</h1>
 
     {% include 'navbar.html' %}
-    <div class="columns">
+    {% include 'breadcrumb.html' %}
 
+    <div class="columns">
     {% block content %}
+
+
 
     {% endblock %}
 
