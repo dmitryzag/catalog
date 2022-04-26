@@ -5,22 +5,25 @@
     <title>Каталог</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'base/css/styles.css' %}">
+{#    {% load static %}#}
+{#    <link rel="stylesheet" type="text/css" href="{% static 'base/css/styles.css' %}">#}
 </head>
 <body>
 
-    <h1 class="has-text-weight-bold has-text-centered mt-4 is-size-3">Электронный каталог</h1>
+{#    <h1 class="has-text-weight-bold has-text-centered mt-4 is-size-3">Электронный каталог</h1>#}
 
     {% include 'navbar.html' %}
-    {% include 'breadcrumb.html' %}
+
 
     <div class="columns">
-    {% block content %}
+
+        {% block content %}
+        {% include 'catalog.html' %}
 
 
-    {% endblock %}
-    {% include 'pagination.html' %}
+        {% include 'pagination.html' %}
+        {% endblock %}
+
     </div>
 
 </body>

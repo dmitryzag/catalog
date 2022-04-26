@@ -1,11 +1,8 @@
-{% extends 'main.html' %}
-
-{% block content %}
-
     <div class="column is-3 ml-6" >
         <div class="card" style="height: 40rem">
             <div class="card-content">
                 <div class="content">
+                    <strong>Каталог</strong><br>
                     {% for item in items %}
                         {% if not item.category %}
                             <a href="{{ item.slug }}/">{{ item }}</a><br>
@@ -17,11 +14,10 @@
 
     </div>
     <div class="column is-8">
-            <div class="card" style="height: 40rem">
-                <div class="card-content">
-                    <div class="content">
+        <div class="card" style="height: 40rem">
+            <div class="card-content">
+                {% include 'breadcrumb.html' %}
+                <div class="content">
             </div>
         </div>
     </div>
-
-{% endblock %}
