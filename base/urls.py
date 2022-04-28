@@ -1,12 +1,6 @@
-from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
-    path('', views.catalog, name='catalog'),
-    # path('<str:pk>/<str:us>/<str:kk>', views.catalog, name='catalog'),
-
-    # path('<str:pk>/', views.firstLevel, name='firstLevel'),
-    # path('/<str:us>/', views.secondLevel, name='secondLevel'),
-
+    re_path(r'^(?P<args>[\w+/]*)$', views.catalog, name='catalog'),
 ]
