@@ -5,10 +5,8 @@ from .models import Item, Category
 
 
 def catalog(req, args):
-    # firstLevel = Category.objects.filter(parent__isnull=True)
     slugs = args.split('/')
-    print(Category.objects.all()[8].parent.slug)
-
+    items = Item.objects.all()
     categories = Category.objects.filter(parent__isnull=True)
     breadcrumbs = []
     url = '/'
@@ -20,5 +18,5 @@ def catalog(req, args):
             breadcrumb = {'slug': slug, 'url': url, 'name': name}
             breadcrumbs.append(breadcrumb)
 
-    context = {'categories': categories, 'breadcrumbs': breadcrumbs}
+    context = {'categories': categories, 'breadcrumbs': breadcrumbs, 'items': items}
     return render(req, 'main.html', context)

@@ -14,7 +14,7 @@
                                     <li><a href="{{ thirdLevel.get_absolute_url }}">{{ thirdLevel.name }}</a></li>
                                     <ul>
                                     {% for item in items %}
-                                        <li>{{ item }}</li>
+                                        <li><a href="{{ item.slug }}">{{ item }}</a></li>
                                     {% endfor %}
                                     </ul>
                                 {% endfor %}
