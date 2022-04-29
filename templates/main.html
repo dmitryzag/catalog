@@ -9,22 +9,15 @@
 {#    <link rel="stylesheet" type="text/css" href="{% static 'base/css/styles.css' %}">#}
 </head>
 <body>
-
-{#    <h1 class="has-text-weight-bold has-text-centered mt-4 is-size-3">Электронный каталог</h1>#}
-
     {% include 'navbar.html' %}
-
-
     <div class="columns">
 
         {% block content %}
         {% include 'catalog.html' %}
 
 
-        {% include 'pagination.html' %}
         {% endblock %}
 
     </div>
-
 </body>
 </html>
