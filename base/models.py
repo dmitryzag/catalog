@@ -21,20 +21,12 @@ class Category(models.Model):
     parent = models.ForeignKey('Category', related_name='child', on_delete=models.CASCADE, null=True, blank=True)
 
     def get_absolute_url(self):
-        sl = []
+        sl = [self.slug]
+        parent = self.parent
+        while parent:
+            sl.append(parent.slug)
+            parent = parent.parent
 
-        parent_backup = self.parent
-        slug_backup = self.slug
-
-        while self.parent:
-            sl.append(str(self.slug))
-            self.slug = self.parent.slug
-            self.parent = self.parent.parent
-        else:
-            sl.append(str(self.slug))
-
-        self.slug = slug_backup
-        self.parent = parent_backup
         return "/{0}/".format('/'.join(sl[::-1]))
 
     def __str__(self):

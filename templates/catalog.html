@@ -12,11 +12,6 @@
                                 <ul>
                                 {% for thirdLevel in ch1.child.all %}
                                     <li><a href="{{ thirdLevel.get_absolute_url }}">{{ thirdLevel.name }}</a></li>
-                                    <ul>
-                                    {% for item in items %}
-                                        <li><a href="{{ item.slug }}">{{ item }}</a></li>
-                                    {% endfor %}
-                                    </ul>
                                 {% endfor %}
                                 </ul>
                             {% endfor %}
