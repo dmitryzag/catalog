@@ -3,21 +3,22 @@
             <div class="card-content">
                 <div class="content">
                     <strong>Каталог</strong><br>
-                    <ul>
-                    {% for category in categories %}
-                        <li><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
-                        <ul>
-                            {% for ch1 in category.child.all %}
-                                <li><a href="{{ ch1.get_absolute_url }}">{{ ch1.name }}</a></li>
-                                <ul>
-                                {% for thirdLevel in ch1.child.all %}
-                                    <li><a href="{{ thirdLevel.get_absolute_url }}">{{ thirdLevel.name }}</a></li>
-                                {% endfor %}
-                                </ul>
-                            {% endfor %}
-                        </ul>
-                    {% endfor %}
-                    </ul>
+{#                    <ul>#}
+{#                    {% for category in categories %}#}
+{#                        <li><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>#}
+{#                        <ul>#}
+{#                            {% for ch1 in category.child.all %}#}
+{#                                <li><a href="{{ ch1.get_absolute_url }}">{{ ch1.name }}</a></li>#}
+{#                                <ul>#}
+{#                                {% for thirdLevel in ch1.child.all %}#}
+{#                                    <li><a href="{{ thirdLevel.get_absolute_url }}">{{ thirdLevel.name }}</a></li>#}
+{#                                {% endfor %}#}
+{#                                </ul>#}
+{#                            {% endfor %}#}
+{#                        </ul>#}
+{#                    {% endfor %}#}
+{#                    </ul>#}
+                    {% include 'categories.html' %}
             </div>
         </div>
     </div>

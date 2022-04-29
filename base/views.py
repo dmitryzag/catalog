@@ -17,7 +17,5 @@ def catalog(req, args):
         breadcrumb = {'slug': slug, 'url': url, 'name': name}
         breadcrumbs.append(breadcrumb)
 
-
-
     context = {'categories': categories, 'breadcrumbs': breadcrumbs, 'items': items}
     return render(req, 'main.html', context)
