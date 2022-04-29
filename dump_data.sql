@@ -236,6 +236,42 @@ ALTER SEQUENCE public.auth_user_user_permissions_id_seq OWNED BY public.auth_use
 
 
 --
+-- Name: base_category; Type: TABLE; Schema: public; Owner: zagibalov
+--
+
+CREATE TABLE public.base_category (
+    id bigint NOT NULL,
+    name text NOT NULL,
+    slug character varying(50) NOT NULL,
+    image character varying(100) NOT NULL,
+    parent_id bigint
+);
+
+
+ALTER TABLE public.base_category OWNER TO zagibalov;
+
+--
+-- Name: base_category_id_seq; Type: SEQUENCE; Schema: public; Owner: zagibalov
+--
+
+CREATE SEQUENCE public.base_category_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.base_category_id_seq OWNER TO zagibalov;
+
+--
+-- Name: base_category_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zagibalov
+--
+
+ALTER SEQUENCE public.base_category_id_seq OWNED BY public.base_category.id;
+
+
+--
 -- Name: base_item; Type: TABLE; Schema: public; Owner: zagibalov
 --
 
@@ -269,106 +305,6 @@ ALTER TABLE public.base_item_id_seq OWNER TO zagibalov;
 --
 
 ALTER SEQUENCE public.base_item_id_seq OWNED BY public.base_item.id;
-
-
---
--- Name: base_micro; Type: TABLE; Schema: public; Owner: zagibalov
---
-
-CREATE TABLE public.base_micro (
-    id bigint NOT NULL,
-    name character varying(200) NOT NULL
-);
-
-
-ALTER TABLE public.base_micro OWNER TO zagibalov;
-
---
--- Name: base_micro_id_seq; Type: SEQUENCE; Schema: public; Owner: zagibalov
---
-
-CREATE SEQUENCE public.base_micro_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.base_micro_id_seq OWNER TO zagibalov;
-
---
--- Name: base_micro_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zagibalov
---
-
-ALTER SEQUENCE public.base_micro_id_seq OWNED BY public.base_micro.id;
-
-
---
--- Name: base_prefix; Type: TABLE; Schema: public; Owner: zagibalov
---
-
-CREATE TABLE public.base_prefix (
-    id bigint NOT NULL,
-    name character varying(200) NOT NULL
-);
-
-
-ALTER TABLE public.base_prefix OWNER TO zagibalov;
-
---
--- Name: base_prefix_id_seq; Type: SEQUENCE; Schema: public; Owner: zagibalov
---
-
-CREATE SEQUENCE public.base_prefix_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.base_prefix_id_seq OWNER TO zagibalov;
-
---
--- Name: base_prefix_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zagibalov
---
-
-ALTER SEQUENCE public.base_prefix_id_seq OWNED BY public.base_prefix.id;
-
-
---
--- Name: base_processor; Type: TABLE; Schema: public; Owner: zagibalov
---
-
-CREATE TABLE public.base_processor (
-    id bigint NOT NULL,
-    name_id bigint NOT NULL,
-    model_id bigint
-);
-
-
-ALTER TABLE public.base_processor OWNER TO zagibalov;
-
---
--- Name: base_processor_id_seq; Type: SEQUENCE; Schema: public; Owner: zagibalov
---
-
-CREATE SEQUENCE public.base_processor_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.base_processor_id_seq OWNER TO zagibalov;
-
---
--- Name: base_processor_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zagibalov
---
-
-ALTER SEQUENCE public.base_processor_id_seq OWNED BY public.base_processor.id;
 
 
 --
@@ -538,31 +474,17 @@ ALTER TABLE ONLY public.auth_user_user_permissions ALTER COLUMN id SET DEFAULT n
 
 
 --
+-- Name: base_category id; Type: DEFAULT; Schema: public; Owner: zagibalov
+--
+
+ALTER TABLE ONLY public.base_category ALTER COLUMN id SET DEFAULT nextval('public.base_category_id_seq'::regclass);
+
+
+--
 -- Name: base_item id; Type: DEFAULT; Schema: public; Owner: zagibalov
 --
 
 ALTER TABLE ONLY public.base_item ALTER COLUMN id SET DEFAULT nextval('public.base_item_id_seq'::regclass);
-
-
---
--- Name: base_micro id; Type: DEFAULT; Schema: public; Owner: zagibalov
---
-
-ALTER TABLE ONLY public.base_micro ALTER COLUMN id SET DEFAULT nextval('public.base_micro_id_seq'::regclass);
-
-
---
--- Name: base_prefix id; Type: DEFAULT; Schema: public; Owner: zagibalov
---
-
-ALTER TABLE ONLY public.base_prefix ALTER COLUMN id SET DEFAULT nextval('public.base_prefix_id_seq'::regclass);
-
-
---
--- Name: base_processor id; Type: DEFAULT; Schema: public; Owner: zagibalov
---
-
-ALTER TABLE ONLY public.base_processor ALTER COLUMN id SET DEFAULT nextval('public.base_processor_id_seq'::regclass);
 
 
 --
@@ -647,6 +569,10 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 38	Can change item	10	change_item
 39	Can delete item	10	delete_item
 40	Can view item	10	view_item
+41	Can add category	11	add_category
+42	Can change category	11	change_category
+43	Can delete category	11	delete_category
+44	Can view category	11	view_category
 \.
 
 
@@ -676,45 +602,28 @@ COPY public.auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
 
 
 --
+-- Data for Name: base_category; Type: TABLE DATA; Schema: public; Owner: zagibalov
+--
+
+COPY public.base_category (id, name, slug, image, parent_id) FROM stdin;
+2	Процессоры	processor	media/proc.jpg	\N
+3	Наушники	headphones	media/15375.30_6_500.jpg	\N
+4	Колонки	loudspeakers	media/bb.jpg	\N
+5	Видеокарты	videocard	media/nvidia.jpg	\N
+6	Флэшки	flash	media/flash.jpg	\N
+7	INTEL	intel	media/intel.jpeg	2
+8	AMD	amd	media/index_MsqxeJz.jpeg	2
+10	Проводные	wire	media/16150107-1.jpg	3
+9	i5	i5core	media/intel_MWIfW0I.jpeg	7
+\.
+
+
+--
 -- Data for Name: base_item; Type: TABLE DATA; Schema: public; Owner: zagibalov
 --
 
 COPY public.base_item (id, "desc", image, slug, category_id) FROM stdin;
-2	Процессор	index_04vON4H.jpeg	proc	\N
-3	INTEL	index_jjH8svB.jpeg	intel	2
-4	AMD	intel.jpeg	amd	2
-5	Монитор	screen.jpg	screen	\N
-6	Видеокарты	nvidia.jpg	videocard	\N
-7	Колонки	bb.jpg	loudspeakers	\N
-8	Наушники	media/15375.30_6_500.jpg	headphones	\N
-\.
-
-
---
--- Data for Name: base_micro; Type: TABLE DATA; Schema: public; Owner: zagibalov
---
-
-COPY public.base_micro (id, name) FROM stdin;
-2	CELERON
-\.
-
-
---
--- Data for Name: base_prefix; Type: TABLE DATA; Schema: public; Owner: zagibalov
---
-
-COPY public.base_prefix (id, name) FROM stdin;
-3	AMD
-4	INTEL
-\.
-
-
---
--- Data for Name: base_processor; Type: TABLE DATA; Schema: public; Owner: zagibalov
---
-
-COPY public.base_processor (id, name_id, model_id) FROM stdin;
-9	4	2
+11	Alder Lake 12600k	media/image_8374505.jpg	alder_lake	9
 \.
 
 
@@ -750,6 +659,40 @@ COPY public.django_admin_log (id, action_time, object_id, object_repr, action_fl
 25	2022-04-25 11:44:14.238895+00	6	Видеокарты	1	[{"added": {}}]	10	1
 26	2022-04-25 12:48:06.787734+00	7	Колонки	1	[{"added": {}}]	10	1
 27	2022-04-26 05:39:42.055387+00	8	Наушники	1	[{"added": {}}]	10	1
+28	2022-04-27 05:26:19.228558+00	8	Наушники	3		10	1
+29	2022-04-27 05:26:19.230456+00	7	Колонки	3		10	1
+30	2022-04-27 05:26:19.231443+00	6	Видеокарты	3		10	1
+31	2022-04-27 05:26:19.232734+00	5	Монитор	3		10	1
+32	2022-04-27 05:26:19.233617+00	4	AMD	3		10	1
+33	2022-04-27 05:26:19.234489+00	3	INTEL	3		10	1
+34	2022-04-27 05:26:19.235484+00	2	Процессор	3		10	1
+35	2022-04-27 05:27:11.953102+00	1	Category object (1)	1	[{"added": {}}]	11	1
+36	2022-04-27 05:28:00.843791+00	9	INTEL	1	[{"added": {}}]	10	1
+37	2022-04-27 05:28:41.942312+00	1	Процессор	3		11	1
+38	2022-04-27 06:15:32.061124+00	2	Процессоры	1	[{"added": {}}]	11	1
+39	2022-04-27 06:15:50.485021+00	10	AMD	1	[{"added": {}}]	10	1
+40	2022-04-27 06:16:11.101455+00	3	Наушники	1	[{"added": {}}]	11	1
+41	2022-04-27 06:16:28.374265+00	4	Колонки	1	[{"added": {}}]	11	1
+42	2022-04-27 06:16:46.171239+00	5	Видеокарты	1	[{"added": {}}]	11	1
+43	2022-04-27 06:17:40.124916+00	6	Флэшки	1	[{"added": {}}]	11	1
+44	2022-04-27 06:49:19.201805+00	10	AMD	3		10	1
+45	2022-04-27 06:49:54.326588+00	7	INTEL	1	[{"added": {}}]	11	1
+46	2022-04-27 06:50:12.527832+00	8	AMD	1	[{"added": {}}]	11	1
+47	2022-04-27 07:17:26.552861+00	8	AMD	2	[]	11	1
+48	2022-04-27 08:49:52.246575+00	9	i5	1	[{"added": {}}]	11	1
+49	2022-04-28 06:18:52.834286+00	10	Проводные	1	[{"added": {}}]	11	1
+50	2022-04-28 07:01:43.685516+00	9	i5	2	[{"changed": {"fields": ["Slug"]}}]	11	1
+51	2022-04-28 07:20:10.125676+00	11	iiii	1	[{"added": {}}]	11	1
+52	2022-04-28 07:20:30.58821+00	12	sdfasdf	1	[{"added": {}}]	11	1
+53	2022-04-28 07:27:06.235582+00	11	что-то под i5	2	[{"changed": {"fields": ["Name", "Slug"]}}]	11	1
+54	2022-04-28 07:27:18.112944+00	12	sdfasdf	2	[{"changed": {"fields": ["Slug"]}}]	11	1
+55	2022-04-28 07:27:28.812079+00	12	под под i5	2	[{"changed": {"fields": ["Name"]}}]	11	1
+56	2022-04-28 09:17:40.367342+00	11	Alder Lake 12600k	1	[{"added": {}}]	10	1
+57	2022-04-28 10:20:55.933777+00	9	i5	2	[{"changed": {"fields": ["Parent"]}}]	11	1
+58	2022-04-28 10:22:24.420575+00	9	i5	2	[{"changed": {"fields": ["Parent"]}}]	11	1
+59	2022-04-28 10:23:01.827706+00	12	под под i5	3		11	1
+60	2022-04-28 10:23:01.829484+00	11	что-то под i5	3		11	1
+61	2022-04-28 10:23:09.275755+00	9	i5	2	[{"changed": {"fields": ["Parent"]}}]	11	1
 \.
 
 
@@ -768,6 +711,7 @@ COPY public.django_content_type (id, app_label, model) FROM stdin;
 8	base	prefix
 9	base	micro
 10	base	item
+11	base	category
 \.
 
 
@@ -813,6 +757,9 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 35	base	0017_item	2022-04-25 10:25:24.398195+00
 36	base	0018_alter_item_category	2022-04-25 10:26:13.833113+00
 37	base	0019_alter_item_category	2022-04-25 10:26:44.558792+00
+38	base	0020_alter_item_category	2022-04-27 05:25:31.965042+00
+39	base	0021_category_remove_processor_model_and_more	2022-04-27 05:26:25.565031+00
+40	base	0022_category_parent	2022-04-27 06:48:47.723066+00
 \.
 
 
@@ -843,7 +790,7 @@ SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zagibalov
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 40, true);
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 44, true);
 
 
 --
@@ -868,52 +815,38 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 
 
 --
+-- Name: base_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zagibalov
+--
+
+SELECT pg_catalog.setval('public.base_category_id_seq', 12, true);
+
+
+--
 -- Name: base_item_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zagibalov
 --
 
-SELECT pg_catalog.setval('public.base_item_id_seq', 8, true);
-
-
---
--- Name: base_micro_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zagibalov
---
-
-SELECT pg_catalog.setval('public.base_micro_id_seq', 2, true);
-
-
---
--- Name: base_prefix_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zagibalov
---
-
-SELECT pg_catalog.setval('public.base_prefix_id_seq', 4, true);
-
-
---
--- Name: base_processor_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zagibalov
---
-
-SELECT pg_catalog.setval('public.base_processor_id_seq', 9, true);
+SELECT pg_catalog.setval('public.base_item_id_seq', 11, true);
 
 
 --
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zagibalov
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 27, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 61, true);
 
 
 --
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zagibalov
 --
 
-SELECT pg_catalog.setval('public.django_content_type_id_seq', 10, true);
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 11, true);
 
 
 --
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zagibalov
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 37, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 40, true);
 
 
 --
@@ -1013,35 +946,19 @@ ALTER TABLE ONLY public.auth_user
 
 
 --
+-- Name: base_category base_category_pkey; Type: CONSTRAINT; Schema: public; Owner: zagibalov
+--
+
+ALTER TABLE ONLY public.base_category
+    ADD CONSTRAINT base_category_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: base_item base_item_pkey; Type: CONSTRAINT; Schema: public; Owner: zagibalov
 --
 
 ALTER TABLE ONLY public.base_item
     ADD CONSTRAINT base_item_pkey PRIMARY KEY (id);
-
-
---
--- Name: base_micro base_micro_pkey; Type: CONSTRAINT; Schema: public; Owner: zagibalov
---
-
-ALTER TABLE ONLY public.base_micro
-    ADD CONSTRAINT base_micro_pkey PRIMARY KEY (id);
-
-
---
--- Name: base_prefix base_prefix_pkey; Type: CONSTRAINT; Schema: public; Owner: zagibalov
---
-
-ALTER TABLE ONLY public.base_prefix
-    ADD CONSTRAINT base_prefix_pkey PRIMARY KEY (id);
-
-
---
--- Name: base_processor base_processor_pkey; Type: CONSTRAINT; Schema: public; Owner: zagibalov
---
-
-ALTER TABLE ONLY public.base_processor
-    ADD CONSTRAINT base_processor_pkey PRIMARY KEY (id);
 
 
 --
@@ -1148,6 +1065,27 @@ CREATE INDEX auth_user_username_6821ab7c_like ON public.auth_user USING btree (u
 
 
 --
+-- Name: base_category_parent_id_42ca2e66; Type: INDEX; Schema: public; Owner: zagibalov
+--
+
+CREATE INDEX base_category_parent_id_42ca2e66 ON public.base_category USING btree (parent_id);
+
+
+--
+-- Name: base_category_slug_6efb48c2; Type: INDEX; Schema: public; Owner: zagibalov
+--
+
+CREATE INDEX base_category_slug_6efb48c2 ON public.base_category USING btree (slug);
+
+
+--
+-- Name: base_category_slug_6efb48c2_like; Type: INDEX; Schema: public; Owner: zagibalov
+--
+
+CREATE INDEX base_category_slug_6efb48c2_like ON public.base_category USING btree (slug varchar_pattern_ops);
+
+
+--
 -- Name: base_item_category_id_4e814b7e; Type: INDEX; Schema: public; Owner: zagibalov
 --
 
@@ -1166,20 +1104,6 @@ CREATE INDEX base_item_slug_9484d41c ON public.base_item USING btree (slug);
 --
 
 CREATE INDEX base_item_slug_9484d41c_like ON public.base_item USING btree (slug varchar_pattern_ops);
-
-
---
--- Name: base_processor_model_id_907f6261; Type: INDEX; Schema: public; Owner: zagibalov
---
-
-CREATE INDEX base_processor_model_id_907f6261 ON public.base_processor USING btree (model_id);
-
-
---
--- Name: base_processor_name_id_f668a1f3; Type: INDEX; Schema: public; Owner: zagibalov
---
-
-CREATE INDEX base_processor_name_id_f668a1f3 ON public.base_processor USING btree (name_id);
 
 
 --
@@ -1267,27 +1191,19 @@ ALTER TABLE ONLY public.auth_user_user_permissions
 
 
 --
--- Name: base_item base_item_category_id_4e814b7e_fk_base_item_id; Type: FK CONSTRAINT; Schema: public; Owner: zagibalov
+-- Name: base_category base_category_parent_id_42ca2e66_fk_base_category_id; Type: FK CONSTRAINT; Schema: public; Owner: zagibalov
+--
+
+ALTER TABLE ONLY public.base_category
+    ADD CONSTRAINT base_category_parent_id_42ca2e66_fk_base_category_id FOREIGN KEY (parent_id) REFERENCES public.base_category(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: base_item base_item_category_id_4e814b7e_fk_base_category_id; Type: FK CONSTRAINT; Schema: public; Owner: zagibalov
 --
 
 ALTER TABLE ONLY public.base_item
-    ADD CONSTRAINT base_item_category_id_4e814b7e_fk_base_item_id FOREIGN KEY (category_id) REFERENCES public.base_item(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: base_processor base_processor_model_id_907f6261_fk_base_micro_id; Type: FK CONSTRAINT; Schema: public; Owner: zagibalov
---
-
-ALTER TABLE ONLY public.base_processor
-    ADD CONSTRAINT base_processor_model_id_907f6261_fk_base_micro_id FOREIGN KEY (model_id) REFERENCES public.base_micro(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: base_processor base_processor_name_id_f668a1f3_fk_base_prefix_id; Type: FK CONSTRAINT; Schema: public; Owner: zagibalov
---
-
-ALTER TABLE ONLY public.base_processor
-    ADD CONSTRAINT base_processor_name_id_f668a1f3_fk_base_prefix_id FOREIGN KEY (name_id) REFERENCES public.base_prefix(id) DEFERRABLE INITIALLY DEFERRED;
+    ADD CONSTRAINT base_item_category_id_4e814b7e_fk_base_category_id FOREIGN KEY (category_id) REFERENCES public.base_category(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
