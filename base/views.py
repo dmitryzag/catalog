@@ -3,7 +3,6 @@ from .models import Item, Category
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 
-
 # Create your views here.
 
 
@@ -25,4 +24,18 @@ def catalog(req, args):
         breadcrumbs.append(breadcrumb)
 
     context = {'categories': categories, 'breadcrumbs': breadcrumbs, 'items': items, 'page_obj': page_obj}
+    return render(req, 'main.html', context)
+
+
+def search(req):
+
+    items = Item.objects.filter(desc__icontains=req.GET.get('search', 1))
+
+    paginator = Paginator(items, 12)
+    page_number = req.GET.get('page', 1)
+
+    page_obj = paginator.page(page_number)
+
+    categories = Category.objects.filter(parent__isnull=True)
+    context = {'page_obj': page_obj, 'categories': categories}
     return render(req, 'main.html', context)

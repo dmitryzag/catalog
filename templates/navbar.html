@@ -8,16 +8,13 @@
         <strong>Поиск по каталогу</strong>
       </p>
     </div>
+
     <div class="level-item">
       <div class="field has-addons">
-        <p class="control">
-          <input class="input" type="text" placeholder="Найти товар">
-        </p>
-        <p class="control">
-          <button class="button">
-            Поиск
-          </button>
-        </p>
+          <form action="{% url 'search' %}" method="GET">
+                <input class="input" type="text" placeholder="Найти товар" name="search">
+                <button class="button">Поиск</button>
+          </form>
       </div>
     </div>
   </div>

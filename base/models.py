@@ -10,6 +10,9 @@ class Item(models.Model):
     slug = models.SlugField()
     category = models.ForeignKey('Category', related_name='items', on_delete=models.CASCADE, null=True, blank=True)
 
+    def get_absolute_url(self):
+        return "{0}{1}/".format(self.category.get_absolute_url(), self.slug)
+
     def __str__(self):
         return self.desc
 
