@@ -9,10 +9,11 @@ from django.core.paginator import Paginator
 
 def catalog(req, args):
     slugs = list(filter(lambda elm: elm != '', args.split('/')))
-    items = Item.objects.filter(category__slug=slugs[-1])
+    items = [] if not slugs else Item.objects.filter(category__slug=slugs[-1])
     paginator = Paginator(items, 12)
     page_number = req.GET.get('page')
     page_obj = paginator.get_page(page_number)
+
     categories = Category.objects.filter(parent__isnull=True)
     breadcrumbs = []
     url = '/'
