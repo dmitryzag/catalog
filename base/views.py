@@ -33,9 +33,10 @@ def search(req):
 
     paginator = Paginator(items, 12)
     page_number = req.GET.get('page', 1)
-
     page_obj = paginator.page(page_number)
-
+    s = req.GET['search']
+    s = "&search="+s
+    print(s)
     categories = Category.objects.filter(parent__isnull=True)
-    context = {'page_obj': page_obj, 'categories': categories}
+    context = {'page_obj': page_obj, 'categories': categories, 'page_number': page_number,'s': s}
     return render(req, 'main.html', context)

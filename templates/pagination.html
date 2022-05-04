@@ -1,8 +1,8 @@
 <nav class="pagination is-rounded ml-6 ml-6 mt-4" role="navigation" aria-label="pagination">
     {% if page_obj.has_previous %}
-          <a href="?page={{ page_obj.previous_page_number }}" class="pagination-previous"><<< назад</a>
+          <a href="?page={{ page_obj.previous_page_number }}{{ s }}" class="pagination-previous"><<< назад</a>
     {% endif %}
     {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" class="pagination-next">вперёд >>></a>
+            <a href="?page={{ page_obj.next_page_number }}{{ s }}" class="pagination-next">вперёд >>></a>
     {% endif %}
 </nav>
