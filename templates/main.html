@@ -5,8 +5,8 @@
     <title>Каталог</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-{#    {% load static %}#}
-{#    <link rel="stylesheet" type="text/css" href="{% static 'base/css/styles.css' %}">#}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'base/style.css' %}">
 </head>
 <body>
     {% include 'navbar.html' %}
@@ -14,7 +14,6 @@
 
         {% block content %}
         {% include 'catalog.html' %}
-
 
         {% endblock %}
 

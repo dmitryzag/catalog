@@ -6,7 +6,7 @@ from django.urls import reverse
 
 class Item(models.Model):
     desc = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='media/')
+    image = models.ImageField(upload_to='items/')
     slug = models.SlugField()
     category = models.ForeignKey('Category', related_name='items', on_delete=models.CASCADE, null=True, blank=True)
 
@@ -17,7 +17,7 @@ class Item(models.Model):
 class Category(models.Model):
     name = models.TextField()
     slug = models.SlugField()
-    image = models.ImageField(upload_to='media/')
+    image = models.ImageField(upload_to='media')
     parent = models.ForeignKey('Category', related_name='child', on_delete=models.CASCADE, null=True, blank=True)
 
     def get_absolute_url(self):
