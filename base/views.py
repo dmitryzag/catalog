@@ -1,9 +1,6 @@
 from django.shortcuts import render
 from .models import Item, Category
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
-
-# Create your views here.
 
 
 def catalog(req, args):
@@ -28,15 +25,13 @@ def catalog(req, args):
 
 
 def search(req):
-
     items = Item.objects.filter(desc__icontains=req.GET.get('search', 1))
 
     paginator = Paginator(items, 12)
     page_number = req.GET.get('page', 1)
     page_obj = paginator.page(page_number)
-    s = req.GET['search']
-    s = "&search="+s
-    print(s)
+    query = req.GET['search']
+    print("ЭТО КВЕРИ", query)
     categories = Category.objects.filter(parent__isnull=True)
-    context = {'page_obj': page_obj, 'categories': categories, 'page_number': page_number,'s': s}
+    context = {'page_obj': page_obj, 'categories': categories, 'page_number': page_number,'query': query}
     return render(req, 'main.html', context)
