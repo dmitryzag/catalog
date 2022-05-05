@@ -10,6 +10,7 @@ def catalog(req, args):
     page_number = req.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+
     categories = Category.objects.filter(parent__isnull=True)
     breadcrumbs = []
     url = '/'
@@ -20,6 +21,11 @@ def catalog(req, args):
         breadcrumb = {'slug': slug, 'url': url, 'name': name}
         breadcrumbs.append(breadcrumb)
 
+    # attempt = Category.objects.filter(child__parent__slug=slugs[-1])
+    # for a in attempt:
+    #     print(a.name)
+    # attempt2 = attempt.filter()
+    # print(attempt)
     context = {'categories': categories, 'breadcrumbs': breadcrumbs, 'items': items, 'page_obj': page_obj}
     return render(req, 'main.html', context)
 
@@ -30,8 +36,15 @@ def search(req):
     paginator = Paginator(items, 12)
     page_number = req.GET.get('page', 1)
     page_obj = paginator.page(page_number)
-    query = req.GET['search']
-    print("ЭТО КВЕРИ", query)
+    query = req.GET.get('search', '')
+    r = req.GET.dict()
+
+    for key, value in r.items():
+        print(key, value)
+
+    # print("ЭТО КВЕРИ", req.GET)
+
+
     categories = Category.objects.filter(parent__isnull=True)
     context = {'page_obj': page_obj, 'categories': categories, 'page_number': page_number,'query': query}
     return render(req, 'main.html', context)
