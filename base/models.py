@@ -6,12 +6,16 @@ from django.urls import reverse
 
 class Item(models.Model):
     desc = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='items/')
+    image = models.ImageField(upload_to='items/', null=True, blank=True)
     slug = models.SlugField()
     category = models.ForeignKey('Category', related_name='items', on_delete=models.CASCADE, null=True, blank=True)
 
     def get_absolute_url(self):
         return "{0}{1}/".format(self.category.get_absolute_url(), self.slug)
+
+    def try_image(self):
+        if not self.image:
+            return self.category.image
 
     def __str__(self):
         return self.desc
@@ -20,7 +24,7 @@ class Item(models.Model):
 class Category(models.Model):
     name = models.TextField()
     slug = models.SlugField()
-    image = models.ImageField(upload_to='media')
+    image = models.ImageField(upload_to='media', null=True, blank=True)
     parent = models.ForeignKey('Category', related_name='child', on_delete=models.CASCADE, null=True, blank=True)
 
     def get_absolute_url(self):

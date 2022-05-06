@@ -6,18 +6,19 @@ from .utils import recursion
 
 def catalog(req, args):
     tests = []
+    slugs = list(filter(lambda elm: elm != '', args.split('/')))
     active_category = Category.objects.get(slug=slugs[-1])
     recursion(active_category, tests)
     items = [] if not slugs else Item.objects.filter(category__slug=slugs[-1])
-    paginator = Paginator(tests, 12)
     print(tests)
+    paginator = Paginator(tests, 12)
     page_number = req.GET.get('page')
     page_obj = paginator.get_page(page_number)
+
     categories = Category.objects.filter(parent__isnull=True)
     breadcrumbs = []
     url = '/'
 
-    slugs = list(filter(lambda elm: elm != '', args.split('/')))
     for slug in slugs:
         url = '{0}{1}/'.format(url, slug)
         name = Category.objects.get(slug=slug)
@@ -25,7 +26,6 @@ def catalog(req, args):
         breadcrumbs.append(breadcrumb)
 
     context = {'categories': categories, 'breadcrumbs': breadcrumbs, 'items': items, 'page_obj': page_obj, 'tests': tests}
-
     return render(req, 'main.html', context)
 
 

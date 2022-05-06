@@ -16,7 +16,9 @@
                 {% for page in page_obj %}
                     <div class="card mt-2 mb-4 ml-4 mr-4" style="width: 150px; height: 220px">
                         <div class="card-content is-flex is-justify-content-center is-flex-wrap-wrap" >
-                            <img src="{{ page.image.url }}" width="100px" height="100px">
+{#                            <img src="{{ page.image.url }}" width="100px" height="100px">#}
+                            <img src="{% if not page.image %}{{ page.is_image.url }}{% else %}{{ page.image.url }}{% endif %}" width="100px" height="100px">
+
                             <div class="content">
                                 {{ page.desc }}
                             </div>
