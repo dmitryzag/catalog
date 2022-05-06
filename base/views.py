@@ -1,38 +1,31 @@
 from django.shortcuts import render
 from .models import Item, Category
 from django.core.paginator import Paginator
+from .utils import recursion
 
 
 def catalog(req, args):
-    slugs = list(filter(lambda elm: elm != '', args.split('/')))
+    tests = []
+    active_category = Category.objects.get(slug=slugs[-1])
+    recursion(active_category, tests)
     items = [] if not slugs else Item.objects.filter(category__slug=slugs[-1])
-    # items = [] if not slugs else Item.objects.filter(category__slug=slugs[-1])
-    # if not items and Item.objects.filter(category__parent__slug=slugs[-1]):
-    #     items = [] if not slugs else Item.objects.filter(category__parent__slug=slugs[-1])
-    # elif not Item.objects.filter(category__parent__slug=slugs[-1]) \
-    #         and Item.objects.filter(category__parent__parent__slug=slugs[-1]):
-    #     items = [] if not slugs else Item.objects.filter(category__parent__parent__slug=slugs[-1])
-
-    paginator = Paginator(items, 12)
+    paginator = Paginator(tests, 12)
+    print(tests)
     page_number = req.GET.get('page')
     page_obj = paginator.get_page(page_number)
-
     categories = Category.objects.filter(parent__isnull=True)
     breadcrumbs = []
     url = '/'
 
+    slugs = list(filter(lambda elm: elm != '', args.split('/')))
     for slug in slugs:
         url = '{0}{1}/'.format(url, slug)
         name = Category.objects.get(slug=slug)
         breadcrumb = {'slug': slug, 'url': url, 'name': name}
         breadcrumbs.append(breadcrumb)
 
-    # attempt = Item.objects.filter(category__parent__parent__slug=slugs[-1])
-    # attempt1 = Item.objects.filter(category__parent__slug=slugs[-1])
-    #
-    # print(attempt)
-    # print(attempt1)
-    context = {'categories': categories, 'breadcrumbs': breadcrumbs, 'items': items, 'page_obj': page_obj}
+    context = {'categories': categories, 'breadcrumbs': breadcrumbs, 'items': items, 'page_obj': page_obj, 'tests': tests}
+
     return render(req, 'main.html', context)
 
 
