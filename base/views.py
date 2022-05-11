@@ -8,11 +8,13 @@ def catalog(req, args):
     tests = []
     slugs = list(filter(lambda elm: elm != '', args.split('/')))
 
-    active_category = Category.objects.get(slug=slugs[-1])
+    try:
+        active_category = Category.objects.get(slug=slugs[-1])
+        recursion(active_category, tests)
+    except :
+        print(Category.DoesNotExist)
 
     items = [] if not slugs else Item.objects.filter(category__slug=slugs[-1])
-
-    recursion(active_category, tests)
 
     paginator = Paginator(tests, 12)
     page_number = req.GET.get('page')
@@ -24,9 +26,12 @@ def catalog(req, args):
 
     for slug in slugs:
         url = '{0}{1}/'.format(url, slug)
-        name = Category.objects.get(slug=slug)
-        breadcrumb = {'slug': slug, 'url': url, 'name': name}
-        breadcrumbs.append(breadcrumb)
+        try:
+            name = Category.objects.get(slug=slug)
+            breadcrumb = {'slug': slug, 'url': url, 'name': name}
+            breadcrumbs.append(breadcrumb)
+        except Category.DoesNotExist:
+            print(Category.DoesNotExist)
 
     num_page = ''
     if paginator.count > 1:
