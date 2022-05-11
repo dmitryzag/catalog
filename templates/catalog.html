@@ -3,24 +3,21 @@
             <div class="card-content">
                 <div class="content">
                     <strong>Каталог</strong><br>
-                    {% include 'categories.html' %}
+                    {% include "categories.html" %}
+                </div>
             </div>
         </div>
     </div>
-    </div>
-
     <div class="column is-8 ">
         <div class="card " style="height: 40rem">
-            {% include 'breadcrumb.html' %}
+            {% include "breadcrumb.html" %}
             <div class="card-content is-flex is-flex-wrap-wrap is-align-items-center">
-                {% for page in page_obj %}
+                {% for item in page_obj %}
                     <div class="card mt-2 mb-4 ml-4 mr-4" style="width: 150px; height: 220px">
                         <div class="card-content is-flex is-justify-content-center is-flex-wrap-wrap" >
-{#                            <img src="{{ page.image.url }}" width="100px" height="100px">#}
-                            <img src="{% if not page.image %}{{ page.is_image.url }}{% else %}{{ page.image.url }}{% endif %}" width="100px" height="100px">
-
+                            <img src="{{ item.try_image.url }}" width="100px" height="100px">
                             <div class="content">
-                                {{ page.desc }}
+                                {{ item.desc }}
                             </div>
                         </div>
                     </div>
@@ -28,5 +25,5 @@
                 {% endfor %}
             </div>
         </div>
-        {% include 'pagination.html' %}
+        {% include "pagination.html" %}
     </div>

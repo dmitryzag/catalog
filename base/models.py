@@ -1,8 +1,5 @@
 from django.db import models
-from django.urls import reverse
 
-
-# Create your models here.
 
 class Item(models.Model):
     desc = models.CharField(max_length=200)
@@ -11,11 +8,12 @@ class Item(models.Model):
     category = models.ForeignKey('Category', related_name='items', on_delete=models.CASCADE, null=True, blank=True)
 
     def get_absolute_url(self):
-        return "{0}{1}/".format(self.category.get_absolute_url(), self.slug)
+        return '{0}{1}/'.format(self.category.get_absolute_url(), self.slug)
 
     def try_image(self):
-        if not self.image:
-            return self.category.image
+        if self.image:
+            return self.image
+        return self.category.try_image()
 
     def __str__(self):
         return self.desc
@@ -33,8 +31,13 @@ class Category(models.Model):
         while parent:
             sl.append(parent.slug)
             parent = parent.parent
+        return '/{0}/'.format('/'.join(sl[::-1]))
 
-        return "/{0}/".format('/'.join(sl[::-1]))
+    def try_image(self):
+        if not self.image:
+            return self.parent.try_image()
+        return self.image
 
     def __str__(self):
         return self.name
+
