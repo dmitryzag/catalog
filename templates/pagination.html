@@ -1,17 +1,8 @@
 <nav class="pagination is-rounded ml-6 ml-6 mt-4" role="navigation" aria-label="pagination">
     {% if page_obj.has_previous %}
-            <a href="{% if request.GET and not request.GET.page %}{% for i,v in request.GET.dict.items %}&{{ i }}={{ v }}{% endfor %}{% elif 'page' in request.GET.dict and request.GET.dict|length >= 2 %}{% for i,v in request.GET.dict.items %}{% if i != 'page' %}?page={{ page_obj.previous_page_number }}&{{ i }}={{ v }}{% endif %}{% endfor %}{% else %}?page={{ page_obj.previous_page_number }}{% endif %}" class="pagination-previous"><<< назад</a>
+            <a href="{{ page.previous }}" class="pagination-previous"><<< назад</a>
     {% endif %}
     {% if page_obj.has_next %}
-            <a href="{% if request.GET and not request.GET.page %}?page={{ page_obj.next_page_number }}{% for i,v in request.GET.dict.items %}&{{ i }}={{ v }}{% endfor %}{% elif 'page' in request.GET.dict and request.GET.dict|length >= 2 %}{% for i,v in request.GET.dict.items %}{% if i != 'page' %}?page={{ page_obj.next_page_number }}&{{ i }}={{ v }}{% endif %}{% endfor %}{% else %}?page={{ page_obj.next_page_number }}{% endif %}" class="pagination-next">вперёд >>></a>
+            <a href="{{ page.next }}" class="pagination-next">вперёд >>></a>
     {% endif %}
 </nav>
-
-{#<nav class="pagination is-rounded ml-6 ml-6 mt-4" role="navigation" aria-label="pagination">#}
-{#    {% if page_obj.has_previous %}#}
-{#            <a href="{{ num_page }}" class="pagination-previous"><<< назад</a>#}
-{#    {% endif %}#}
-{#    {% if page_obj.has_next %}#}
-{#            <a href="{{ num_page }}" class="pagination-next">вперёд >>></a>#}
-{#    {% endif %}#}
-{#</nav>#}
