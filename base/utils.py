@@ -1,21 +1,20 @@
 import urllib.parse
 from base.models import Category
 
-items = []
+
+def wrap_function(func):
+    def wrapped(root):
+        items = []
+        items += list(root.items.all())
+        func(root)
+        return items
+    return wrapped
 
 
+@wrap_function
 def recursion(root):
-    global items
-    items += list(root.items.all())
     for child in root.child.all():
-        print(items)
         recursion(child)
-    return items
-
-
-def clear_items():
-    global items
-    items.clear()
 
 
 def get_page(paginator, params):
@@ -34,17 +33,15 @@ def get_page(paginator, params):
     return page
 
 
-def breadcrumb(slugs):
+def create_breadcrumb(slugs):
     breadcrumbs = []
     url = '/'
     for slug in slugs:
         url = '{0}{1}/'.format(url, slug)
         try:
             name = Category.objects.get(slug=slug)
-            breadcrumb = {'slug': slug, 'url': url, 'name': name}
-            breadcrumbs.append(breadcrumb)
         except Category.DoesNotExist:
-            breadcrumb = {'slug': slug, 'url': slug, 'name': slug}
-            breadcrumbs.append(breadcrumb)
-
+            pass
+        breadcrumb = {'slug': slug, 'url': url, 'name': name}
+    breadcrumbs.append(breadcrumb)
     return breadcrumbs
