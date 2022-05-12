@@ -4,37 +4,41 @@ from urllib.parse import urlparse
 from base.models import Category
 
 
-def recursion(root, items):
+# def recursion(root, items):
+#     items += list(root.items.all())
+#     for child in root.child.all():
+#         print(items)
+#         recursion(child, items)
+
+items = []
+
+def recursion(root):
+    global items
     items += list(root.items.all())
     for child in root.child.all():
-        recursion(child, items)
+        print(items)
+        recursion(child)
+    return items
 
 
-def get_page(paginator, page_obj, req):
-    page_next = page_obj.next_page_number() if page_obj.has_next() else None
-    page_previous = page_obj.previous_page_number() if page_obj.has_previous() else None
-    pages = {}
-    if paginator.count > 1:
-        if req.GET and not req.GET.get('page'):
-            page_next = '?page={0}'.format(page_next) if page_next else ''
-            page_previous = '?page={0}'.format(page_previous) if page_previous else ''
-            for i, v in req.GET.dict().items():
-                page_next += '&{0}={1}'.format(i, v) if page_next else ''
-                page_previous += '&{0}={1}'.format(i, v) if page_previous else ''
-            pages = {'next': page_next, 'previous': page_previous}
-        elif 'page' in req.GET.dict() and len(req.GET.dict()) >= 2:
-            key_value = []
-            for i, v in req.GET.dict().items():
-                if i != 'page':
-                    key_value.append((i, v))
-            page_next = '?page={0}&{1}'.format(page_next, urllib.parse.urlencode(key_value))
-            page_previous = '?page={0}&{1}'.format(page_previous, urllib.parse.urlencode(key_value))
-            pages = {'next': page_next, 'previous': page_previous}
-        else:
-            page_next = '?page={0}'.format(page_next) if page_next else ''
-            page_previous = '?page={0}'.format(page_previous) if page_previous else ''
-            pages = {'next': page_next, 'previous': page_previous}
-    return pages
+def clear_items():
+    global items
+    items.clear()
+
+
+def get_page(paginator, params):
+    params = params.copy()
+    current_page = int(params.get('page', 1))
+    page = {'items': paginator.get_page(current_page)}
+    prev_page = current_page - 1
+    next_page = current_page + 1
+    if prev_page > 0:
+        params['page'] = prev_page
+        page['prev_page'] = '?{0}'.format(urllib.parse.urlencode(params))
+    if next_page > current_page:
+        params['page'] = next_page
+        page['next_page'] = '?{0}'.format(urllib.parse.urlencode(params))
+    return page
 
 
 def breadcrumb(slugs, breadcrumbs):
