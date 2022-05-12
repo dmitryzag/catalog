@@ -1,16 +1,8 @@
 import urllib.parse
-from urllib.parse import urlparse
-
 from base.models import Category
 
-
-# def recursion(root, items):
-#     items += list(root.items.all())
-#     for child in root.child.all():
-#         print(items)
-#         recursion(child, items)
-
 items = []
+
 
 def recursion(root):
     global items
@@ -38,10 +30,12 @@ def get_page(paginator, params):
     if next_page > current_page:
         params['page'] = next_page
         page['next_page'] = '?{0}'.format(urllib.parse.urlencode(params))
+
     return page
 
 
-def breadcrumb(slugs, breadcrumbs):
+def breadcrumb(slugs):
+    breadcrumbs = []
     url = '/'
     for slug in slugs:
         url = '{0}{1}/'.format(url, slug)
@@ -52,3 +46,5 @@ def breadcrumb(slugs, breadcrumbs):
         except Category.DoesNotExist:
             breadcrumb = {'slug': slug, 'url': slug, 'name': slug}
             breadcrumbs.append(breadcrumb)
+
+    return breadcrumbs
