@@ -17,7 +17,10 @@ def list_of_items(root):
 
 def get_page(paginator, params):
     params = params.copy()
-    current_page = int(params.get('page', 1))
+    try:
+        current_page = int(params.get('page', 1))
+    except ValueError:
+        current_page = 1
     page = {'items': paginator.get_page(current_page)}
     prev_page = current_page - 1
     if prev_page > 0:
@@ -44,3 +47,10 @@ def create_breadcrumb(slugs):
         breadcrumb = {'slug': slug, 'url': url, 'name': name}
         breadcrumbs.append(breadcrumb)
     return breadcrumbs
+
+
+def tree(items):
+    a = []
+    for i in range(items.count()):
+        print(items[i])
+

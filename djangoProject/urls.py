@@ -6,5 +6,6 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('silk/', include('silk.urls', namespace='silk')),
     path('', include('base.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
