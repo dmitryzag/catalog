@@ -2,19 +2,17 @@ import urllib.parse
 from base.models import Category
 
 
-def wrap_function(func):
-    def wrapped(root):
-        items = []
-        items += list(root.items.all())
-        func(root)
+def list_of_items(root):
+    a = []
+
+    def recursion(wrap_root, items):
+        items += list(wrap_root.items.all())
+        for child in wrap_root.child.all():
+            recursion(child, items)
         return items
-    return wrapped
 
-
-@wrap_function
-def recursion(root):
-    for child in root.child.all():
-        recursion(child)
+    a = recursion(root, a)
+    return a
 
 
 def get_page(paginator, params):
@@ -22,11 +20,12 @@ def get_page(paginator, params):
     current_page = int(params.get('page', 1))
     page = {'items': paginator.get_page(current_page)}
     prev_page = current_page - 1
-    next_page = current_page + 1
     if prev_page > 0:
         params['page'] = prev_page
         page['prev_page'] = '?{0}'.format(urllib.parse.urlencode(params))
-    if next_page > current_page:
+
+    next_page = current_page + 1
+    if paginator.num_pages - next_page >= 0:
         params['page'] = next_page
         page['next_page'] = '?{0}'.format(urllib.parse.urlencode(params))
 
@@ -41,7 +40,7 @@ def create_breadcrumb(slugs):
         try:
             name = Category.objects.get(slug=slug)
         except Category.DoesNotExist:
-            pass
+            name = slug
         breadcrumb = {'slug': slug, 'url': url, 'name': name}
-    breadcrumbs.append(breadcrumb)
+        breadcrumbs.append(breadcrumb)
     return breadcrumbs

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Item, Category
 from django.core.paginator import Paginator
-from .utils import recursion, get_page, create_breadcrumb
+from .utils import list_of_items, get_page, create_breadcrumb
 from django.http import Http404
 
 
@@ -13,23 +13,22 @@ def catalog(req, args):
     except:
         raise Http404()
 
-    items = recursion(active_category)
-    print(items)
+    items = list_of_items(active_category)
+
     paginator = Paginator(items, 12)
     page = get_page(paginator, req.GET)
     categories = Category.objects.filter(parent__isnull=True)
     breadcrumbs = create_breadcrumb(slugs)
     context = {'categories': categories, 'breadcrumbs': breadcrumbs, 'page': page}
-
     return render(req, 'main.html', context)
 
 
 def search(req):
-    slugs = ['Поиск']
+    slug = ['Поиск']
     categories = Category.objects.filter(parent__isnull=True)
     items = Item.objects.filter(desc__icontains=req.GET.get('search', 1))
 
-    breadcrumbs = create_breadcrumb(slugs)
+    breadcrumbs = create_breadcrumb(slug)
     paginator = Paginator(items, 12)
     page = get_page(paginator, req.GET)
 
