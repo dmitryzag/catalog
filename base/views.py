@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from .models import Item, Category
 from django.core.paginator import Paginator
-from .utils import list_of_items, get_page, create_breadcrumb, tree
+from .utils import get_page, create_breadcrumb, tree
 from django.http import Http404
+from pprint import pprint
 
 
 def catalog(req, args):
@@ -13,14 +14,10 @@ def catalog(req, args):
     except:
         raise Http404()
 
-    # items = list_of_items(active_category)
     items = []
     paginator = Paginator(items, 12)
     page = get_page(paginator, req.GET)
-
-    categories = Category.objects.values()
-    a = tree(categories)
-    print(a)
+    categories = tree()
     breadcrumbs = create_breadcrumb(slugs)
     context = {'categories': categories, 'breadcrumbs': breadcrumbs, 'page': page}
     return render(req, 'main.html', context)

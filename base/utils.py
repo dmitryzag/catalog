@@ -49,35 +49,23 @@ def create_breadcrumb(slugs):
     return breadcrumbs
 
 
-def tree(categories):
+def tree():
+    categories = Category.objects.values()
     no_parents = [no_parent for no_parent in categories if not no_parent['parent_id']]
     categories = [category for category in categories if category not in no_parents]
 
-    def wrap(parents):
-        for parent in parents:
-            print(parent['name'])
-            for category in categories:
-                if category['parent_id'] == parent['id']:
-                    wrap([category])
-    #
-
     # def wrap(parents, a):
-    #     for parent in parents:
-    #         if len(parents) > 1:
-    #             a.append(parent)
-    #         for category in categories:
-    #             if category['parent_id'] == parent['id']:
-    #                 print(category['name'])
-    #                 a.append(category)
-    #                 wrap([category], a)
-    #     return a
-
-    # def wrap(parents, a):
-    #     for parent in parents:
+    #     for parent in parents:ы
     #         a.append([parent])
-    #         for category in categories:
-    #             if category['parent_id'] == parent['id']:
-    #                 wrap([category], a)
+    #         wrap([category for category in categories if parent['id'] == category['parent_id']], a[a.index([parent])])
     #     return a
-    # a = []
-    return wrap(no_parents)
+
+    def wrap(parents, a):
+        for parent in parents:
+            parent['child'] = []
+            a.append(parent)
+            wrap([category for category in categories if parent['id'] == category['parent_id']], a[a.index(parent)]['child'])
+        return a
+
+    a = []
+    return wrap(no_parents, a)
