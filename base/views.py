@@ -20,6 +20,7 @@ def catalog(req, args):
     paginator = Paginator(items, 12)
     page = get_page(paginator, req.GET)
     categories = tree()
+    print(categories)
     breadcrumbs = create_breadcrumb(slugs)
     context = {'categories': categories, 'breadcrumbs': breadcrumbs, 'page': page}
     return render(req, 'main.html', context)
