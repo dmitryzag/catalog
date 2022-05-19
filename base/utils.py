@@ -61,39 +61,34 @@ def bread(slugs):
     return breadcrumbs
 
 
-def list_of_items(root):
-    a = []
-
-    def recursion(wrap_root, items):
-        items += list(wrap_root.items.all())
-        for child in wrap_root.child.all():
-            recursion(child, items)
-        return items
-
-    a = recursion(root, a)
-    return a
-
-
 def get_items(slugs):
-    cats = tree()
-    # cats = [cat for cat in cats if cat['slug'] == slugs]
+    categories = tree()
     items = Item.objects.values()
 
-    def wrap(categories):
-        for category in categories:
+    def wrap(cats):
+        for cat in cats:
             for item in items:
-                if item['category_id'] == category['id']:
-                    category['items'].append(item)
-            wrap(category['child'])
+                if item['category_id'] == cat['id']:
+                    cat['items'].append(item)
+            wrap(cat['child'])
 
-    def find_items(categories, a):
-        for category in categories:
-            if category['path'].count(slugs):
-                a += list(category['items'])
-            find_items(category['child'], a)
-        return a
+    def find_items(cats, arr):
+        for cat in cats:
+            if cat['path'].count(slugs):
+                arr += list(cat['items'])
+            find_items(cat['child'], arr)
+        return arr
 
-    a = []
-    wrap(cats)
-    a = find_items(cats, a)
+    wrap(categories)
+    a = find_items(categories, arr=[])
     return a
+
+
+def lost_image(categories):
+    a = []
+    for category in categories:
+        if not category['image']:
+            lost_image(category)
+        else:
+            a.append({'image': category})
+
