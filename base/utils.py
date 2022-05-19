@@ -52,25 +52,18 @@ def create_breadcrumb(slugs):
 def tree():
     categories = Category.objects.values()
     parents = [no_parent for no_parent in categories if not no_parent['parent_id']]
+
+    for parent in parents:
+        parent['path'] = parent['slug']
+
     def wrap(parents):
         for parent in parents:
-            parent['path'] = parent['slug']
             parent['child'] = [category for category in categories if parent['id'] == category['parent_id']]
-
             parent['path'] += '/'
             for child in parent['child']:
                 child['path'] = parent['path'] + child['slug']
                 print(child['path'])
-
-
-
-            # parent['slug'] += '/'
-            # for child in parent['child']:
-            #     child['slug'] = parent['slug'] + child['slug']
-            # parent['slug'] = '/' + parent['slug']
-
-
-
+            parent['path'] = '/' + parent['path']
             wrap([category for category in categories if parent['id'] == category['parent_id']])
 
     wrap(parents)
