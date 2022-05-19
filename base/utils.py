@@ -59,11 +59,10 @@ def tree():
     def wrap(parents):
         for parent in parents:
             parent['child'] = [category for category in categories if parent['id'] == category['parent_id']]
-            parent['path'] += '/'
+            parent['path'] = '{}{}'.format(parent['path'], '/')
             for child in parent['child']:
-                child['path'] = parent['path'] + child['slug']
-                print(child['path'])
-            parent['path'] = '/' + parent['path']
+                child['path'] = '{}{}'.format(parent['path'], child['slug'])
+            parent['path'] = '{}{}'.format('/', parent['path'])
             wrap([category for category in categories if parent['id'] == category['parent_id']])
 
     wrap(parents)
