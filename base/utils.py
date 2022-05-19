@@ -24,25 +24,31 @@ def get_page(paginator, params):
 
 def tree():
     categories = Category.objects.values()
-    for category in categories:
-        category['items'] = []
     parents = [no_parent for no_parent in categories if not no_parent['parent_id']]
 
     for parent in parents:
         parent['path'] = parent['slug']
 
     def wrap(parents):
+        stored_image = None
         for parent in parents:
             parent['child'] = [category for category in categories if parent['id'] == category['parent_id']]
+            parent['items'] = []
 
             parent['path'] = '{}{}'.format(parent['path'], '/')
             for child in parent['child']:
                 child['path'] = '{}{}'.format(parent['path'], child['slug'])
             parent['path'] = '{}{}'.format('/', parent['path'])
 
+            if parent['image'] == '':
+                parent['image'] = stored_image
+            else:
+                stored_image = parent['image']
+
             wrap([category for category in categories if parent['id'] == category['parent_id']])
 
     wrap(parents)
+
     return parents
 
 
@@ -84,11 +90,5 @@ def get_items(slugs):
     return a
 
 
-def lost_image(categories):
-    a = []
-    for category in categories:
-        if not category['image']:
-            lost_image(category)
-        else:
-            a.append({'image': category})
+
 

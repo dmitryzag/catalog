@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Item
 from django.core.paginator import Paginator
-from .utils import get_page, tree, bread, get_items, lost_image
+from .utils import get_page, tree, bread, get_items
 
 
 def catalog(req, args):
@@ -10,6 +10,7 @@ def catalog(req, args):
     paginator = Paginator(items, 12)
     page = get_page(paginator, req.GET)
     categories = tree()
+    print(categories)
     breadcrumbs = bread(slugs)
     context = {'categories': categories, 'breadcrumbs': breadcrumbs, 'page': page}
 
