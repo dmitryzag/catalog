@@ -10,9 +10,7 @@ def catalog(req, args):
     items = get_items(categories, slugs[-1])
     paginator = Paginator(items, 12)
     page = get_page(paginator, req.GET)
-
     breadcrumbs = create_bread(categories, slugs)
-    print(breadcrumbs)
     context = {'categories': categories, 'breadcrumbs': breadcrumbs, 'page': page}
 
     return render(req, 'main.html', context)

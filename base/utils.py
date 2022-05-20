@@ -69,9 +69,9 @@ def get_items(categories, slugs):
 def create_bread(categories, slugs):
     breadcrumbs = []
 
-    def dfs(categories, slugs):
+    def dfs(cats, slugs):
         for slug in slugs:
-            for category in categories:
+            for category in cats:
                 if category['slug'] == slug:
                     breadcrumb = {'slug': slug, 'url': category['path'], 'name': category['name']}
                     breadcrumbs.append(breadcrumb)
@@ -81,3 +81,15 @@ def create_bread(categories, slugs):
     dfs(categories, slugs)
     breadcrumbs = [{'slug': slugs, 'url': '/', 'name': slugs}] if not breadcrumbs else breadcrumbs
     return breadcrumbs
+
+
+def lost_image(categories):
+    image = None
+
+    def wrap(categories):
+        for category in categories:
+            if category['image']:
+                image = category['image']
+            lost_image(category['child'])
+
+    wrap(categories)
