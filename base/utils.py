@@ -73,11 +73,12 @@ def dfs(categories, slug):
         else:
             return dfs(category['child'], slug)
 
+a = dfs(tree(), 'i5core')
+print(a)
+
 def create_bread(categories, slugs):
     breadcrumbs = []
     for slug in slugs:
         breadcrumbs.append(dfs(categories, slug))
-
-    breadcrumbs = list(filter(lambda elm: elm != None, breadcrumbs))
     breadcrumbs = [{'slug': slugs, 'url': '/', 'name': slugs}] if not breadcrumbs else breadcrumbs
     return breadcrumbs
