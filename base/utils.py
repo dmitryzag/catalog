@@ -71,12 +71,12 @@ def create_bread(categories, slugs):
 
     def dfs(cats, path):
         for slug in path:
-            for category in cats:
-                if category['slug'] == slug:
-                    breadcrumb = {'slug': slug, 'url': category['path'], 'name': category['name']}
+            for cat in cats:
+                if cat['slug'] == slug:
+                    breadcrumb = {'slug': slug, 'url': cat['path'], 'name': cat['name']}
                     breadcrumbs.append(breadcrumb)
                     path.pop(path.index(slug))
-                    dfs(category['child'], path)
+                    dfs(cat['child'], path)
 
     dfs(categories, slugs)
     breadcrumbs = [{'slug': slugs, 'url': '/', 'name': slugs}] if not breadcrumbs else breadcrumbs
