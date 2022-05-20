@@ -30,7 +30,6 @@ def tree():
         parent['path'] = parent['slug']
 
     def wrap(parents):
-        stored_image = None
         for parent in parents:
             parent['child'] = [category for category in categories if parent['id'] == category['parent_id']]
             parent['items'] = []
@@ -39,36 +38,13 @@ def tree():
             for child in parent['child']:
                 child['path'] = '{}{}'.format(parent['path'], child['slug'])
             parent['path'] = '{}{}'.format('/', parent['path'])
-
-            if parent['image'] == '':
-                parent['image'] = stored_image
-            else:
-                stored_image = parent['image']
-
             wrap([category for category in categories if parent['id'] == category['parent_id']])
 
     wrap(parents)
-
     return parents
 
 
-def bread(slugs):
-    categories = Category.objects.values()
-    breadcrumbs = []
-    url = '/'
-
-    for slug in slugs:
-        url = '{0}{1}/'.format(url, slug)
-        for category in categories:
-            if category['slug'] == slug:
-                breadcrumbs.append({'slug': slug, 'url': url, 'name': category['name']})
-
-    breadcrumbs = [{'slug': slugs, 'url': url, 'name': slugs}] if not breadcrumbs else breadcrumbs
-    return breadcrumbs
-
-
-def get_items(slugs):
-    categories = tree()
+def get_items(categories, slugs):
     items = Item.objects.values()
 
     def wrap(cats):
@@ -90,5 +66,18 @@ def get_items(slugs):
     return a
 
 
+def create_bread(categories, slugs):
+    breadcrumbs = []
 
+    def dfs(categories, slugs):
+        for slug in slugs:
+            for category in categories:
+                if category['slug'] == slug:
+                    breadcrumb = {'slug': slug, 'url': category['path'], 'name': category['name']}
+                    breadcrumbs.append(breadcrumb)
+                    slugs.pop(slugs.index(slug))
+                    dfs(category['child'], slugs)
 
+    dfs(categories, slugs)
+    breadcrumbs = [{'slug': slugs, 'url': '/', 'name': slugs}] if not breadcrumbs else breadcrumbs
+    return breadcrumbs

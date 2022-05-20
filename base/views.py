@@ -1,17 +1,18 @@
 from django.shortcuts import render
 from .models import Item
 from django.core.paginator import Paginator
-from .utils import get_page, tree, bread, get_items
+from .utils import get_page, tree, get_items, create_bread
 
 
 def catalog(req, args):
     slugs = list(filter(lambda elm: elm != '', args.split('/')))
-    items = get_items(slugs[-1])
+    categories = tree()
+    items = get_items(categories, slugs[-1])
     paginator = Paginator(items, 12)
     page = get_page(paginator, req.GET)
-    categories = tree()
-    print(categories)
-    breadcrumbs = bread(slugs)
+
+    breadcrumbs = create_bread(categories, slugs)
+    print(breadcrumbs)
     context = {'categories': categories, 'breadcrumbs': breadcrumbs, 'page': page}
 
     return render(req, 'main.html', context)
@@ -22,7 +23,7 @@ def search(req):
     categories = tree()
     items = Item.objects.filter(desc__icontains=req.GET.get('search', 1))
 
-    breadcrumbs = bread(slug)
+    breadcrumbs = create_bread(categories, slug)
     paginator = Paginator(items, 12)
     page = get_page(paginator, req.GET)
 
