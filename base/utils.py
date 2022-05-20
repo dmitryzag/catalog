@@ -1,6 +1,6 @@
 import urllib.parse
 from base.models import Category, Item
-
+from functools import partial
 
 def get_page(paginator, params):
     params = params.copy()
@@ -44,40 +44,40 @@ def tree():
     return parents
 
 
-def get_items(categories, slugs):
-    items = Item.objects.values()
+# def get_items(categories, slugs):
+#     items = Item.objects.values()
+#
+#     def wrap(cats):
+#         for cat in cats:
+#             for item in items:
+#                 if item['category_id'] == cat['id']:
+#                     cat['items'].append(item)
+#             wrap(cat['child'])
+#
+#     def find_items(cats, arr):
+#         for cat in cats:
+#             if cat['path'].count(slugs):
+#                 arr += list(cat['items'])
+#             find_items(cat['child'], arr)
+#         return arr
+#
+#     wrap(categories)
+#     a = find_items(categories, arr=[])
+#     return a
 
-    def wrap(cats):
-        for cat in cats:
-            for item in items:
-                if item['category_id'] == cat['id']:
-                    cat['items'].append(item)
-            wrap(cat['child'])
 
-    def find_items(cats, arr):
-        for cat in cats:
-            if cat['path'].count(slugs):
-                arr += list(cat['items'])
-            find_items(cat['child'], arr)
-        return arr
-
-    wrap(categories)
-    a = find_items(categories, arr=[])
-    return a
-
+def dfs(categories, slug):
+    for category in categories:
+        if category['slug'] == slug:
+            return category
+        else:
+            return dfs(category['child'], slug)
 
 def create_bread(categories, slugs):
     breadcrumbs = []
+    for slug in slugs:
+        breadcrumbs.append(dfs(categories, slug))
 
-    def dfs(cats, path):
-        for slug in path:
-            for cat in cats:
-                if cat['slug'] == slug:
-                    breadcrumb = {'slug': slug, 'url': cat['path'], 'name': cat['name']}
-                    breadcrumbs.append(breadcrumb)
-                    path.pop(path.index(slug))
-                    dfs(cat['child'], path)
-
-    dfs(categories, slugs)
+    breadcrumbs = list(filter(lambda elm: elm != None, breadcrumbs))
     breadcrumbs = [{'slug': slugs, 'url': '/', 'name': slugs}] if not breadcrumbs else breadcrumbs
     return breadcrumbs

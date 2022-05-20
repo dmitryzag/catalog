@@ -3,9 +3,9 @@
     <li><a href="/">Каталог</a></li>
       {% for breadcrumb in breadcrumbs %}
           {% if breadcrumb == breadcrumbs|last %}
-              <li><a href="{{ breadcrumb.url }}" class="disabled">{{ breadcrumb.name }}</a></li>
+              <li><a href="{{ breadcrumb.path }}" class="disabled">{{ breadcrumb.name }}</a></li>
           {% else %}
-              <li><a href="{{ breadcrumb.url }}">{{ breadcrumb.name }}</a></li>
+              <li><a href="{{ breadcrumb.path }}">{{ breadcrumb.name }}</a></li>
           {% endif %}
       {% endfor %}
   </ul>
