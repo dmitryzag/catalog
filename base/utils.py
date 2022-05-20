@@ -29,16 +29,16 @@ def tree():
     for parent in parents:
         parent['path'] = parent['slug']
 
-    def wrap(parents):
-        for parent in parents:
-            parent['child'] = [category for category in categories if parent['id'] == category['parent_id']]
-            parent['items'] = []
+    def wrap(elements):
+        for element in elements:
+            element['child'] = [category for category in categories if element['id'] == category['parent_id']]
+            element['items'] = []
 
-            parent['path'] = '{}{}'.format(parent['path'], '/')
-            for child in parent['child']:
-                child['path'] = '{}{}'.format(parent['path'], child['slug'])
-            parent['path'] = '{}{}'.format('/', parent['path'])
-            wrap([category for category in categories if parent['id'] == category['parent_id']])
+            element['path'] = '{}{}'.format(element['path'], '/')
+            for child in element['child']:
+                child['path'] = '{}{}'.format(element['path'], child['slug'])
+            element['path'] = '{}{}'.format('/', element['path'])
+            wrap([category for category in categories if element['id'] == category['parent_id']])
 
     wrap(parents)
     return parents
@@ -69,27 +69,15 @@ def get_items(categories, slugs):
 def create_bread(categories, slugs):
     breadcrumbs = []
 
-    def dfs(cats, slugs):
-        for slug in slugs:
+    def dfs(cats, path):
+        for slug in path:
             for category in cats:
                 if category['slug'] == slug:
                     breadcrumb = {'slug': slug, 'url': category['path'], 'name': category['name']}
                     breadcrumbs.append(breadcrumb)
-                    slugs.pop(slugs.index(slug))
-                    dfs(category['child'], slugs)
+                    path.pop(path.index(slug))
+                    dfs(category['child'], path)
 
     dfs(categories, slugs)
     breadcrumbs = [{'slug': slugs, 'url': '/', 'name': slugs}] if not breadcrumbs else breadcrumbs
     return breadcrumbs
-
-
-def lost_image(categories):
-    image = None
-
-    def wrap(categories):
-        for category in categories:
-            if category['image']:
-                image = category['image']
-            lost_image(category['child'])
-
-    wrap(categories)
