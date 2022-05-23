@@ -65,13 +65,9 @@ def create_bread(categories, slugs):
     return breadcrumbs
 
 
-def get_items(categories, slugs):
+def get_items(categories, slug):
     items = Item.objects.values()
-    current_categories = []
-
-    for slug in slugs:
-        current_categories += list(dfs(categories, slug))
-    current_categories = [current_categories[-1]]
+    current_categories = dfs(categories, slug)
 
     def wrap(cats, objects, cur_items):
         for cat in cats:
