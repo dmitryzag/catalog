@@ -1,6 +1,6 @@
 import urllib.parse
 from base.models import Category, Item
-from functools import partial
+
 
 def get_page(paginator, params):
     params = params.copy()
@@ -44,41 +44,42 @@ def tree():
     return parents
 
 
-# def get_items(categories, slugs):
-#     items = Item.objects.values()
-#
-#     def wrap(cats):
-#         for cat in cats:
-#             for item in items:
-#                 if item['category_id'] == cat['id']:
-#                     cat['items'].append(item)
-#             wrap(cat['child'])
-#
-#     def find_items(cats, arr):
-#         for cat in cats:
-#             if cat['path'].count(slugs):
-#                 arr += list(cat['items'])
-#             find_items(cat['child'], arr)
-#         return arr
-#
-#     wrap(categories)
-#     a = find_items(categories, arr=[])
-#     return a
-
-
 def dfs(categories, slug):
-    for category in categories:
-        if category['slug'] == slug:
-            return category
-        else:
-            return dfs(category['child'], slug)
+    a = []
 
-a = dfs(tree(), 'i5core')
-print(a)
+    def search(cats, path):
+        for category in cats:
+            if category['slug'] == path:
+                a.append(category)
+            else:
+                search(category['child'], path)
+    search(categories, slug)
+    return a
+
 
 def create_bread(categories, slugs):
     breadcrumbs = []
     for slug in slugs:
-        breadcrumbs.append(dfs(categories, slug))
+        breadcrumbs += list(dfs(categories, slug))
     breadcrumbs = [{'slug': slugs, 'url': '/', 'name': slugs}] if not breadcrumbs else breadcrumbs
     return breadcrumbs
+
+
+def get_items(categories, slugs):
+    items = Item.objects.values()
+    current_categories = []
+
+    for slug in slugs:
+        current_categories += list(dfs(categories, slug))
+    current_categories = [current_categories[-1]]
+
+    def wrap(cats, objects, cur_items):
+        for cat in cats:
+            cur_items += list([item for item in objects if item['category_id'] == cat['id']])
+            if cat['child']:
+                wrap(cat['child'], objects, cur_items)
+
+    current_items = []
+    wrap(current_categories, items, current_items)
+    return current_items
+
