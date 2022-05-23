@@ -37,6 +37,7 @@ def tree():
             for child in element['child']:
                 child['path'] = '{}{}'.format(element['path'], child['slug'])
             element['path'] = '{}{}'.format('/', element['path'])
+
             wrap([category for category in categories if element['id'] == category['parent_id']])
 
     wrap(parents)
@@ -53,27 +54,24 @@ def dfs(categories, slug):
             else:
                 search(category['child'], slugs)
     search(categories, slug)
-    return a
+    return a[0]
 
 
 def create_bread(categories, slugs):
-    breadcrumbs = []
-    for slug in slugs:
-        breadcrumbs += dfs(categories, slug)
+    breadcrumbs = [(dfs(categories, slug)) for slug in slugs]
     breadcrumbs = [{'slug': slugs, 'url': '/', 'name': slugs}] if not breadcrumbs else breadcrumbs
     return breadcrumbs
 
 
-def get_items(categories, slug):
-    items = Item.objects.values()
-    current_categories = dfs(categories, slug)
+def get_items(categories, slugs):
+    current_categories = [dfs(categories, slug) for slug in slugs][-1]
 
-    def wrap(cats, objects, cur_items):
+    def wrap(cats, cur_items):
         for cat in cats:
-            cur_items += list([item for item in objects if item['category_id'] == cat['id']])
+            cur_items += [cat['id']]
             if cat['child']:
-                wrap(cat['child'], objects, cur_items)
+                wrap(cat['child'], cur_items)
 
     current_items = []
-    wrap(current_categories, items, current_items)
-    return current_items
+    wrap([current_categories], current_items)
+    return Item.objects.filter(category__in=current_items)
