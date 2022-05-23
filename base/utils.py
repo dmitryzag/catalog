@@ -64,7 +64,10 @@ def create_bread(categories, slugs):
 
 
 def get_items(categories, slugs):
-    current_categories = [dfs(categories, slug) for slug in slugs][-1]
+    try:
+        current_categories = [dfs(categories, slug) for slug in slugs][-1]
+    except IndexError:
+        pass
 
     def wrap(cats, cur_items):
         for cat in cats:
