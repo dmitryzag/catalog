@@ -1,6 +1,6 @@
 import urllib.parse
 from base.models import Category, Item
-
+from collections import deque
 
 def get_page(paginator, params):
     params = params.copy()
@@ -36,30 +36,27 @@ def tree():
 
 
 def dfs(categories, slug):
-    a = []
+    for category in categories:
+        if category['slug'] == slug:
+            return category
 
-    def search(cats, slugs):
-        for category in cats:
-            if category['slug'] == slugs:
-                a.append(category)
-            else:
-                search(category['child'], slugs)
-    search(categories, slug)
-    return a[0]
+    for category in categories:
+        result = dfs(category['child'], slug)
+        if result:
+            return result
 
 
 def create_bread(categories, slugs):
-    breadcrumbs = [(dfs(categories, slug)) for slug in slugs]
+    breadcrumbs = [(dfs(categories, slug)) for slug in slugs if (dfs(categories, slug)) is not None]
     breadcrumbs = [{'slug': slugs, 'url': '/', 'name': slugs}] if not breadcrumbs else breadcrumbs
     return breadcrumbs
 
 
 def get_items(categories, slug):
     current_categories = dfs(categories, slug)
-
     def wrap(cats, cur_items):
         for cat in cats:
-            cur_items += [cat['id']]
+            cur_items.append(cat['id'])
             if cat['child']:
                 wrap(cat['child'], cur_items)
 
