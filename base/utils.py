@@ -47,12 +47,12 @@ def tree():
 def dfs(categories, slug):
     a = []
 
-    def search(cats, path):
+    def search(cats, slugs):
         for category in cats:
-            if category['slug'] == path:
+            if category['slug'] == slugs:
                 a.append(category)
             else:
-                search(category['child'], path)
+                search(category['child'], slugs)
     search(categories, slug)
     return a
 
@@ -60,7 +60,7 @@ def dfs(categories, slug):
 def create_bread(categories, slugs):
     breadcrumbs = []
     for slug in slugs:
-        breadcrumbs += list(dfs(categories, slug))
+        breadcrumbs += dfs(categories, slug)
     breadcrumbs = [{'slug': slugs, 'url': '/', 'name': slugs}] if not breadcrumbs else breadcrumbs
     return breadcrumbs
 
