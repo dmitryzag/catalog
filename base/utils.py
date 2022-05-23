@@ -26,20 +26,11 @@ def tree():
     categories = Category.objects.values()
     parents = [no_parent for no_parent in categories if not no_parent['parent_id']]
 
-    for parent in parents:
-        parent['path'] = parent['slug']
-
-    def wrap(elements):
+    def wrap(elements, parent_path='/'):
         for element in elements:
             element['child'] = [category for category in categories if element['id'] == category['parent_id']]
-
-            element['path'] = '{}{}'.format(element['path'], '/')
-            for child in element['child']:
-                child['path'] = '{}{}'.format(element['path'], child['slug'])
-            element['path'] = '{}{}'.format('/', element['path'])
-
-            wrap([category for category in categories if element['id'] == category['parent_id']])
-
+            element['path'] = f"{parent_path}{element['slug']}/"
+            wrap([category for category in categories if element['id'] == category['parent_id']], element['path'])
     wrap(parents)
     return parents
 
