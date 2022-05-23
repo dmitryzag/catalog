@@ -1,6 +1,6 @@
 import urllib.parse
 from base.models import Category, Item
-from collections import deque
+
 
 def get_page(paginator, params):
     params = params.copy()
@@ -31,6 +31,7 @@ def tree():
             element['child'] = [category for category in categories if element['id'] == category['parent_id']]
             element['path'] = f"{parent_path}{element['slug']}/"
             wrap([category for category in categories if element['id'] == category['parent_id']], element['path'])
+
     wrap(parents)
     return parents
 
@@ -54,6 +55,7 @@ def create_bread(categories, slugs):
 
 def get_items(categories, slug):
     current_categories = dfs(categories, slug)
+
     def wrap(cats, cur_items):
         for cat in cats:
             cur_items.append(cat['id'])
