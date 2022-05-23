@@ -63,11 +63,8 @@ def create_bread(categories, slugs):
     return breadcrumbs
 
 
-def get_items(categories, slugs):
-    try:
-        current_categories = [dfs(categories, slug) for slug in slugs][-1]
-    except IndexError:
-        pass
+def get_items(categories, slug):
+    current_categories = dfs(categories, slug)
 
     def wrap(cats, cur_items):
         for cat in cats:

@@ -7,7 +7,10 @@ from .utils import get_page, tree, create_bread, get_items
 def catalog(req, args):
     slugs = list(filter(lambda elm: elm != '', args.split('/')))
     categories = tree()
-    items = get_items(categories, slugs)
+    try:
+        items = get_items(categories, slugs[-1])
+    except IndexError:
+        items = ''
 
     paginator = Paginator(items, 12)
     page = get_page(paginator, req.GET)
