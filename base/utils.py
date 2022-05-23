@@ -32,7 +32,6 @@ def tree():
     def wrap(elements):
         for element in elements:
             element['child'] = [category for category in categories if element['id'] == category['parent_id']]
-            element['items'] = []
 
             element['path'] = '{}{}'.format(element['path'], '/')
             for child in element['child']:
@@ -78,4 +77,3 @@ def get_items(categories, slug):
     current_items = []
     wrap(current_categories, items, current_items)
     return current_items
-
