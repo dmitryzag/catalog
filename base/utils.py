@@ -31,7 +31,7 @@ def tree():
         for element in elements:
             element['child'] = [category for category in categories if element['id'] == category['parent_id']]
             element['path'] = f"{parent_path}{element['slug']}/"
-            wrap([category for category in categories if element['id'] == category['parent_id']], element['path'])
+            wrap(element['child'], element['path'])
 
     wrap(parents)
     return parents
