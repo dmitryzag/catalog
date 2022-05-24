@@ -63,8 +63,10 @@ def get_items(categories, slug):
             if cat['child']:
                 wrap(cat['child'], cur_items)
 
-    current_items = []
+    q = Q()
     if slug:
+        current_items = []
         wrap(current_categories, current_items)
-    return Item.objects.filter(category__in=current_items) if slug else Item.objects.all()
+        q = Q(category__in=current_items)
+    return Item.objects.filter(q)
 
