@@ -1,3 +1,8 @@
+html {
+    background-color: #dae2ea;
+    height: 100vh;
+}
+
 a.disabled {
     pointer-events: none; /* делаем элемент неактивным для взаимодействия */
     cursor: default; /*  курсор в виде стрелки */

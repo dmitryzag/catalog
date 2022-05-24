@@ -54,7 +54,7 @@ def create_bread(categories, slugs):
 
 
 def get_items(categories, slug):
-    current_categories = dfs(categories, slug)
+    current_categories = [dfs(categories, slug)]
 
     def wrap(cats, cur_items):
         for cat in cats:
@@ -63,5 +63,5 @@ def get_items(categories, slug):
                 wrap(cat['child'], cur_items)
 
     current_items = []
-    wrap([current_categories], current_items)
+    wrap(current_categories, current_items)
     return Item.objects.filter(category__in=current_items)
