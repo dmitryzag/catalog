@@ -66,6 +66,5 @@ def get_items(categories, slug):
     current_items = []
     if slug:
         wrap(current_categories, current_items)
-    return Item.objects.filter(category__in=current_items) or Item.objects.all()
-
+    return Item.objects.filter(category__in=current_items) if slug else Item.objects.all()
 
