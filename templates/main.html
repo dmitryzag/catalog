@@ -10,6 +10,7 @@
     <script type="text/javascript" src="{% static "base/script.js" %}"></script>
 </head>
 <body>
+    {% csrf_token %}
     {% include "navbar.html" %}
     <div class="columns">
 
