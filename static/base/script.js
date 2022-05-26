@@ -1,5 +1,8 @@
-const n = (x,y) => x + y;
+$(document).ready(function(){
+    $('.catalog_link').click(function(event){
+        event.preventDefault();
+        $.post($(this).attr('href'), {}, function(response){
 
-$.post( "ajax/test.html", function( data ) {
-  $( ".result" ).html( data );
+        }, 'json');
+    })
 });

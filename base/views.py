@@ -5,6 +5,7 @@ from .utils import get_page, tree, create_bread, get_items
 
 
 def catalog(req, args):
+    print(req.POST)
     slugs = list(filter(lambda elm: elm != '', args.split('/')))
     categories = tree()
     items = get_items(categories, ''.join(slugs[-1:]))
