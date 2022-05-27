@@ -1,11 +1,11 @@
 <nav class="breadcrumb pl-4 pt-4" aria-label="breadcrumbs">
-  <ul>
-    <li ><a class="breadcrumb" href="/">Каталог</a></li>
+  <ul class="categories">
+    <li ><a class="catalog_link" href="/">Каталог</a></li>
       {% for breadcrumb in breadcrumbs %}
           {% if breadcrumb == breadcrumbs|last %}
-              <li><a href="{{ breadcrumb.path }}" class="disabled breadcrumb">{{ breadcrumb.name }}</a></li>
+              <li><a href="{{ breadcrumb.path }}" class="disabled catalog_link breadcrumb">{{ breadcrumb.name }}</a></li>
           {% else %}
-              <li><a href="{{ breadcrumb.path }}" class="breadcrumb">{{ breadcrumb.name }}</a></li>
+              <li><a href="{{ breadcrumb.path }}" class="catalog_link breadcrumb">{{ breadcrumb.name }}</a></li>
           {% endif %}
       {% endfor %}
   </ul>
