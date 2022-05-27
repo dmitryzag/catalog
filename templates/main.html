@@ -13,10 +13,9 @@
     {% csrf_token %}
     {% include "navbar.html" %}
     <div class="columns">
-
         {% block content %}
+        {% include "left_categories.html" %}
         {% include "catalog.html" %}
-
         {% endblock %}
     </div>
 </body>

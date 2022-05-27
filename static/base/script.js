@@ -8,7 +8,7 @@ $(document).ready(function(){
             dataType: 'json',
             headers: {'X-CSRFToken': $csrf_token},
             success: function (data){
-                console.log($('#catalog'))
+                console.log(data.rendered.)
             }
         })
     })
