@@ -1,8 +1,8 @@
-let $csrf_token = $('[name="csrfmiddlewaretoken"]').attr('value');
 $(document).ready(function(){
     $(document).on('click', '.catalog_link', function(event){
         event.preventDefault();
         let path = $(this).attr('href')
+        let $csrf_token = $('[name="csrfmiddlewaretoken"]').attr('value');
         $.ajax({
             type: 'POST',
             url: path,

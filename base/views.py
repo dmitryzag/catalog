@@ -3,11 +3,9 @@ from .models import Item
 from django.core.paginator import Paginator
 from .utils import get_page, tree, create_bread, get_items
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 
 
-@csrf_exempt
 def catalog(req, args):
     slugs = list(filter(lambda elm: elm != '', args.split('/')))
     categories = tree()
