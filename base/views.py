@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Item
 from django.core.paginator import Paginator
-from .utils import get_page, tree, create_bread, get_items
+from .utils import get_page, tree, create_bread, get_items, dfs
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.http import Http404
@@ -10,10 +10,12 @@ from django.http import Http404
 def catalog(req, args):
     slugs = list(filter(lambda elm: elm != '', args.split('/')))
     categories = tree()
-    try:
-        items = get_items(categories, ''.join(slugs[-1:]))
-    except TypeError:
-        raise Http404
+    items = get_items(categories, ''.join(slugs[-1:]))
+
+    for slug in slugs:
+        if dfs(categories, slug) is None:
+            raise Http404
+
     paginator = Paginator(items, 12)
     page = get_page(paginator, req.GET)
     breadcrumbs = create_bread(categories, slugs) if slugs else ''
