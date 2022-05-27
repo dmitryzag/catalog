@@ -6,9 +6,15 @@ class Item(models.Model):
     image = models.ImageField(upload_to='items/', null=True, blank=True)
     category = models.ForeignKey('Category', related_name='items', on_delete=models.CASCADE, null=True, blank=True)
 
+    def __str__(self):
+        return self.desc
+
 
 class Category(models.Model):
     name = models.TextField()
     slug = models.SlugField()
     image = models.ImageField(upload_to='media', null=True, blank=True)
     parent = models.ForeignKey('Category', related_name='child', on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.name

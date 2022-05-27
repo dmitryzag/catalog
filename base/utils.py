@@ -49,7 +49,8 @@ def dfs(categories, slug):
 
 
 def create_bread(categories, slugs):
-    breadcrumbs = [(dfs(categories, slug)) for slug in slugs if (dfs(categories, slug)) is not None]
+    breadcrumbs = [dfs(categories, slug) for slug in slugs]
+    breadcrumbs = [crumb for crumb in breadcrumbs if crumb]
     breadcrumbs = [{'slug': slugs, 'url': '/', 'name': slugs}] if not breadcrumbs else breadcrumbs
     return breadcrumbs
 
