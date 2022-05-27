@@ -19,5 +19,3 @@ $ DJANGO_SETTINGS_MODULE=djangoProject.settings.production \
 Запуск для dev окружения:\
 $ DJANGO_SETTINGS_MODULE=djangoProject.settings.development \
 ./manage.py runserver
-
-python3 manage.py runserver
