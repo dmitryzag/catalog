@@ -22,11 +22,9 @@ def catalog(req, args):
 
 
 def search(req):
-    slug = 'Поиск'
     categories = tree()
     items = Item.objects.filter(desc__icontains=req.GET.get('search', 1))
-
-    breadcrumbs = create_bread(categories, slug)
+    breadcrumbs = [{'slug': 'Поиск', 'url': '/', 'name': 'Поиск'}]
     paginator = Paginator(items, 12)
     page = get_page(paginator, req.GET)
 
