@@ -2,7 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+djangoProject/settings/.env
 # C extensions
 *.so
 .idea
@@ -120,7 +120,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+djangoProject/settings/.env
 .venv
 env/
 venv/
